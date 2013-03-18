@@ -32,52 +32,83 @@
 			setInterval(function(){
 				displayClock4();
 			}, 1000);
+
+			var time = {
+				hours: 0,
+				minutes: 0,
+				seconds: 0,
+				next: function(){
+					this.seconds++;
+					if(this.seconds == 60){
+						this.seconds = 0;
+						this.minutes++;
+						if(this.minutes > 60){
+							this.minutes = 0;
+							this.hours++;
+							if(this.hours > 12) this.hours = 0;
+						}
+					}
+					return new Date(null,null,null, this.hours, this.minutes, this.seconds);
+				}
+			};
+			function displayClock5(){
+				var clock5 = new Clock(time.next(), 0.3, 0.5, 0.7);
+				var el5 = document.getElementById("clock_canvas5");
+				displayClock(clock5,el5,200);
+			}
+			displayClock5();
+			setInterval(function(){
+				displayClock5();
+			}, 50);
 		};
 
 		function displayClock(clock,can,sideLength){
-			var hh = clock.getHourHand();
-			var mh = clock.getMinuteHand();
-			var sh = clock.getSecondHand();
-			console.log(arguments);
+			//configure the canvas
 			var ctx = can.getContext("2d");
-
 			can.setAttribute("height",sideLength);
 			can.setAttribute("width",sideLength);
 			can.style.width = can.style.height = sideLength + "px";
+
+			//
 			var center = Math.floor(sideLength / 2);
 			var radius = center * 0.85;
-			ctx.fillRect(center-1,center-1,2,2);
+			var hh = clock.getHourHand();
+			var mh = clock.getMinuteHand();
+			var sh = clock.getSecondHand();
+
+			//paint outer circle
 			ctx.beginPath();
 			ctx.arc(center,center,radius,0,2 * Math.PI);
-
-			ctx.font="10px Georgia";
-			ctx.fillText(clock.toString(),0,10);
-
 			ctx.stroke();
+			//paint center circle
+			ctx.beginPath();
+			ctx.arc(center,center,radius/19,0,2 * Math.PI);
+			ctx.fill();
+
+			//re-orient the canvas to the center of the clock
+			ctx.translate(center,center);
+			ctx.rotate(-Math.PI / 2);
+
+			//display the hands
 			displayHand(hh,4);
 			displayHand(mh,2);
 			displayHand(sh,1);
-			function displayHand(hand,lineWidth){
+			ctx.rotate(Math.PI / 2);
+			ctx.translate(-center,-center);
+
+			//display the time as a string
+			ctx.font="10px Georgia";
+			ctx.fillText(clock.toString(),0,10);
+
+			function displayHand(hand,lineWidth){//assumed 0,0 is the center of the clock
 				ctx.lineWidth = lineWidth;
 				ctx.beginPath();
-				ctx.moveTo(center,center);
+				ctx.moveTo(0,0);
 				var t = hand.getTriangle();
 				var theta = t.getTheta();
 				var H =  t.getH() * radius + center;
-				if(theta <= 90){
-					var x = center + t.getX() * radius;
-					var y = center - t.getY() * radius;
-				} else if (theta <= 180){
-					var x = center + t.getY() * radius;
-					var y = center - t.getX() * radius;
-				} else if (theta <= 270){
-					var x = center - t.getX() * radius;
-					var y = center - t.getY() * radius;
-				} else if (theta <= 360){
-					var x = center - t.getX() * radius;
-					var y = center + t.getY() * radius;
-				}
-				console.log(theta,x,y,H);
+				var x = t.getX() * radius;
+				var y = t.getY() * radius;
 				ctx.lineTo(x, y);
 				ctx.stroke();
 			}
@@ -115,5 +146,6 @@
 	<canvas id="clock_canvas2"></canvas>
 	<canvas id="clock_canvas3"></canvas>
 	<canvas id="clock_canvas4"></canvas>
+	<canvas id="clock_canvas5"></canvas>
 </body>
 </html>
