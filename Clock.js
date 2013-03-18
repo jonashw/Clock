@@ -19,7 +19,11 @@ function Clock(date, hourHandLength, minuteHandLength, secondHandLength){
 	this.getSecondHand = function(){ return secondHand; };
 
 	this.toString = function(){
-		return padNumber(hours) + ":" + padNumber(minutes) + ":" + padNumber(seconds) + " " + (isAM ? "AM" : "PM");
+		return (hours == 0 ? 12 : padNumber(hours))
+			+ ":" + padNumber(minutes)
+			+ ":" + padNumber(seconds)
+			+ " " + (isAM ? "AM" : "PM")
+		;
 	};
 }
 
