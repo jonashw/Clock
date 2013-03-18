@@ -6,6 +6,7 @@
 	<script src="Triangle.js"></script>
 	<script src="Hand.js"></script>
 	<script src="Clock.js"></script>
+	<script src="Time.js"></script>
 	<script>
 		window.onload = function(){
 			var clock1 = new Clock(new Date(null,null,null,2,12,5), 0.3, 0.5, 0.7);
@@ -33,26 +34,9 @@
 				displayClock4();
 			}, 1000);
 
-			var time = {
-				hours: 0,
-				minutes: 0,
-				seconds: 0,
-				next: function(){
-					this.seconds++;
-					if(this.seconds == 60){
-						this.seconds = 0;
-						this.minutes++;
-						if(this.minutes > 60){
-							this.minutes = 0;
-							this.hours++;
-							if(this.hours > 12) this.hours = 0;
-						}
-					}
-					return new Date(null,null,null, this.hours, this.minutes, this.seconds);
-				}
-			};
+			var time5 = new Time();
 			function displayClock5(){
-				var clock5 = new Clock(time.next(), 0.3, 0.5, 0.7);
+				var clock5 = new Clock(time5.next(), 0.3, 0.5, 0.7);
 				var el5 = document.getElementById("clock_canvas5");
 				displayClock(clock5,el5,200);
 			}
@@ -60,6 +44,17 @@
 			setInterval(function(){
 				displayClock5();
 			}, 50);
+
+			var time6 = new Time();
+			function displayClock6(){
+				var clock = new Clock(time6.next(), 0.3, 0.5, 0.7);
+				var el = document.getElementById("clock_canvas6");
+				displayClock(clock,el,200);
+			}
+			displayClock6();
+			setInterval(function(){
+				displayClock6();
+			}, 10);
 		};
 
 		function displayClock(clock,can,sideLength){
@@ -88,11 +83,15 @@
 			//re-orient the canvas to the center of the clock
 			ctx.translate(center,center);
 
+			//display the hour numbers 
+			for(var i=1; i<=12; i++){
+				//the canvas is roated 90 degrees, so we've gotta use the position of one number to display another
+				var label = i + 3;
+				displayHourNumber(i, label > 12 ? label - 12 : label);
+			}
+
 			//rotate 90 degrees CCW for easier printing
 			ctx.rotate(-Math.PI / 2);
-
-			//display the hour numbers 
-			for(var i=1; i<=12; i++) displayNumber(i);
 
 			//display the hands
 			displayHand(hh,4);
@@ -116,13 +115,13 @@
 				ctx.lineTo(x, y);
 				ctx.stroke();
 			}
-			function displayNumber(n){
-				var nh = new HourHand(n,0.85);
+			function displayHourNumber(hour,label){
+				var nh = new HourHand(hour,0.85);
 				var t = nh.getTriangle();
 				var x = t.getX() * radius;
 				var y = t.getY() * radius;
 				ctx.font="10px Georgia";
-				ctx.fillText(n,x,y);
+				ctx.fillText(label,x,y);
 			}
 		}
 
@@ -156,5 +155,6 @@
 	<canvas id="clock_canvas3"></canvas>
 	<canvas id="clock_canvas4"></canvas>
 	<canvas id="clock_canvas5"></canvas>
+	<canvas id="clock_canvas6"></canvas>
 </body>
 </html>
