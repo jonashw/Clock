@@ -1,4 +1,4 @@
-function ClockDisplay(clock,el,sideLength){
+function ClockDisplay(clock,el,sideLength,clocklabel){
 	var can = this.canvas = el;
 	var ctx = can.getContext("2d");
 	//configure the canvas
@@ -44,9 +44,14 @@ function ClockDisplay(clock,el,sideLength){
 		ctx.translate(-center,-center);
 
 		//display the time as a string
-		ctx.textAlign="left";
+		ctx.textAlign="center";
+		if(!!clocklabel){
+			ctx.font="bold 10px Georgia";
+			ctx.fillText(clocklabel,center,8);
+		}
 		ctx.font="10px Georgia";
-		ctx.fillText(clock.toString(),0,10);
+		ctx.textAlign="center";
+		ctx.fillText(clock.toString(),center,sideLength-3);
 
 		function displayHand(hand,lineWidth){//assumed 0,0 is the center of the clock
 			ctx.lineWidth = lineWidth;
@@ -68,5 +73,6 @@ function ClockDisplay(clock,el,sideLength){
 			ctx.font="10px Georgia";
 			ctx.fillText(label,x,y);
 		}
+		return this;
 	}
 }

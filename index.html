@@ -8,6 +8,7 @@
 	<script src="Hand.js"></script>
 	<script src="Clock.js"></script>
 	<script src="ClockDisplay.js"></script>
+	<link rel="stylesheet" type="text/css" href="clock.css">
 	<script>
 		window.onload = function(){
 			new ClockDisplay(
@@ -52,10 +53,50 @@
 				).display();
 			},10);
 
+			// time zones
+			liveTimeZoneClock(0,  "Davis");
+			liveTimeZoneClock(1,  "Denver");
+			liveTimeZoneClock(2,  "Chicago");
+			liveTimeZoneClock(3,  "New York");
+			liveTimeZoneClock(7,  "London");
+			liveTimeZoneClock(8,  "Brussels");
+			liveTimeZoneClock(9,  "Helsinki");
+			liveTimeZoneClock(10, "Gomel");
+			liveTimeZoneClock(11, "Abu Dhabi");
+			liveTimeZoneClock(12, "Islamabad");
+			liveTimeZoneClock(13, "Perm");
+			liveTimeZoneClock(14, "Pekanbaru");
+			liveTimeZoneClock(15, "Beijing");
+			liveTimeZoneClock(16, "Tokyo");
+
+			//helper functions
+
 			function liveClock(fn,interval){
 				var time = new Time();
 				fn(time);//inject an arbitrary time object into the clock display fn
-				setInterval(function(){fn(time);}, interval);
+				setInterval(function(){
+					fn(time);
+				}, interval);
+			}
+
+			function liveTimeZoneClock(hourAddend, label){
+				var id = "clock_canvas_" + label.toLowerCase().replace(' ','');
+				liveClock(function(){
+					new ClockDisplay(
+						new Clock(timeAdd(hourAddend), 0.3, 0.5, 0.7),
+						document.getElementById(id),
+						150,
+						label
+					).display();
+				},1000);
+			}
+
+			function timeAdd(hours,minutes,seconds){
+				var d = new Date();
+				if(!!hours) d.setHours(d.getHours() + hours);
+				if(!!minutes) d.setMinutes(d.getMinutes() + minutes);
+				if(!!seconds) d.setSeconds(d.getSeconds() + seconds);
+				return d;
 			}
 		};
 	</script>
@@ -69,5 +110,20 @@
 	<canvas id="clock_canvas4"></canvas>
 	<canvas id="clock_canvas5"></canvas>
 	<canvas id="clock_canvas6"></canvas>
+	<hr>
+	<canvas class="clock" id="clock_canvas_davis"></canvas>
+	<canvas class="clock" id="clock_canvas_denver"></canvas>
+	<canvas class="clock" id="clock_canvas_chicago"></canvas>
+	<canvas class="clock" id="clock_canvas_newyork"></canvas>
+	<canvas class="clock" id="clock_canvas_london"></canvas>
+	<canvas class="clock" id="clock_canvas_brussels"></canvas>
+	<canvas class="clock" id="clock_canvas_helsinki"></canvas>
+	<canvas class="clock" id="clock_canvas_gomel"></canvas>
+	<canvas class="clock" id="clock_canvas_abudhabi"></canvas>
+	<canvas class="clock" id="clock_canvas_islamabad"></canvas>
+	<canvas class="clock" id="clock_canvas_perm"></canvas>
+	<canvas class="clock" id="clock_canvas_pekanbaru"></canvas>
+	<canvas class="clock" id="clock_canvas_beijing"></canvas>
+	<canvas class="clock" id="clock_canvas_tokyo"></canvas>
 </body>
 </html>
