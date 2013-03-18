@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Clock tests</title>
+		<link rel="stylesheet" href="../../core/qunit/qunit.css">
+	</head>
+	<body>
+		<a href="../">Demo</a>
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+		<script src="../triangle.js"></script>
+		<script src="../hand.js"></script>
+		<script src="../clock.js"></script>
+		<script src="../../core/qunit/qunit.js"></script>
+		<script>
+			test( "triangle basics", function() {
+				var t = new Triangle(10,45);
+				equal( t.getTheta(), 45, "Theta is 45" );
+				equal( t.getH(), 10, "H is 10" );
+				equal( t.getX().toPrecision(3), 7.07, "x is 7.07" );
+				equal( t.getX().toPrecision(3), 7.07, "x is 7.07" );
+				var fn = t.getHLineFunction();
+				equal( typeof fn, "function", "HLineFunction is a function" );
+				equal(fn(t.getX()).toPrecision(3), 7.07, "HLineFunction(x_max) is y_max");
+				equal(fn(0), 0, "HLineFunction(0) is 0");
+			});
+			test( "hand basics", function() {
+				var s = new SecondHand(10);
+				equal( s.getDegrees(), 60, "At 10 seconds, the second hand is 60 degrees around" );
+				var m = new MinuteHand(20);
+				equal( m.getDegrees(), 120, "At 20 minutes, the minute hand is 120 degrees around" );
+				var h = new HourHand(6);
+				equal( h.getDegrees(), 180, "At 6 hours, the hour hand is 180 degrees around" );
+				var h = new HourHand(13);
+				equal( h.getDegrees(), 30, "At 1PM (13 hours), the hour hand is 30 degrees around" );
+				ok(h.getTriangle(), "A hand has a triangle");
+			});
+			test("clock basics",function(){
+				var c = new Clock(new Date());
+				ok(c.getSecondHand(),"A clock has a second hand");
+				ok(c.getMinuteHand(),"A clock has a minute hand");
+				ok(c.getHourHand(),"A clock has a hour hand");
+				var c = new Clock(new Date(null,null,null,1,8,9));
+				equal(c.toString(), "01:08:09 AM", "toString() should be in 12-H format with padded values and an AM/PM suffix");
+			});
+		</script>
+	</body>
+</html>

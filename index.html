@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Clock</title>
+	<script src="Triangle.js"></script>
+	<script src="Hand.js"></script>
+	<script src="Clock.js"></script>
+	<script>
+		window.onload = function(){
+			var clock1 = new Clock(new Date(null,null,null,2,12,5), 0.3, 0.5, 0.7);
+			var el1 = document.getElementById("clock_canvas1");
+			displayClock(clock1,el1,200);
+			//printDetails(clock1);
+
+			var clock2 = new Clock(new Date(null,null,null,10,25,55), 0.3, 0.5, 0.7);
+			var el2 = document.getElementById("clock_canvas2");
+			displayClock(clock2,el2,200);
+			//printDetails(clock2);
+
+			var clock3 = new Clock(new Date(null,null,null,6,48,12), 0.3, 0.5, 0.7);
+			var el3 = document.getElementById("clock_canvas3");
+			displayClock(clock3,el3,200);
+			//printDetails(clock3);
+		};
+
+		function displayClock(clock,can,sideLength){
+			var hh = clock.getHourHand();
+			var mh = clock.getMinuteHand();
+			var sh = clock.getSecondHand();
+			console.log(arguments);
+			var ctx = can.getContext("2d");
+
+			can.setAttribute("height",sideLength);
+			can.setAttribute("width",sideLength);
+			can.style.width = can.style.height = sideLength + "px";
+			var center = Math.floor(sideLength / 2);
+			var radius = center * 0.85;
+			ctx.fillRect(center-1,center-1,2,2);
+			ctx.beginPath();
+			ctx.arc(center,center,radius,0,2 * Math.PI);
+
+			ctx.font="10px Georgia";
+			ctx.fillText(clock.toString(),0,10);
+
+			ctx.stroke();
+			displayHand(hh,4);
+			displayHand(mh,2);
+			displayHand(sh,1);
+			function displayHand(hand,lineWidth){
+				ctx.lineWidth = lineWidth;
+				ctx.beginPath();
+				ctx.moveTo(center,center);
+				var t = hand.getTriangle();
+				var theta = t.getTheta();
+				var H =  t.getH() * radius + center;
+				if(theta <= 90){
+					var x = center + t.getX() * radius;
+					var y = center - t.getY() * radius;
+				} else if (theta <= 180){
+					var x = center + t.getY() * radius;
+					var y = center - t.getX() * radius;
+				} else if (theta <= 270){
+					var x = center - t.getX() * radius;
+					var y = center - t.getY() * radius;
+				} else if (theta <= 360){
+					var x = center - t.getX() * radius;
+					var y = center + t.getY() * radius;
+				}
+				console.log(theta,x,y,H);
+				ctx.lineTo(x, y);
+				ctx.stroke();
+			}
+			function displayNumber(n){
+				var nh = new Hand(radius,n,12);
+			}
+		}
+
+		function printDetails(clock){
+			var hh = clock.getHourHand();
+			var mh = clock.getMinuteHand();
+			var sh = clock.getSecondHand();
+			function printRow(name,hand){
+				document.write("<tr>");
+				document.write("<td>" + name + "</td><td>" + hand.getCurrentValue() + "</td><td>" + hand.getDegrees() + "</td>");
+				document.write("</tr>");
+			}
+			document.write(clock.toString() + "<br>");
+			document.write('<table border="1">');
+			document.write("<tr>");
+			document.write("<th>Component</th><th>Original Value</th><th>Value as Degrees</th>");
+			document.write("</tr>");
+			printRow('hour',hh);
+			printRow('minute',mh);
+			printRow('second',sh);
+			document.write("</table>");
+		};
+	</script>
+</head>
+<body>
+	<hr>
+	<a href="tests/">Tests</a>
+	<hr>
+	<canvas id="clock_canvas1"></canvas>
+	<canvas id="clock_canvas2"></canvas>
+	<canvas id="clock_canvas3"></canvas>
+</body>
+</html>
