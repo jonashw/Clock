@@ -87,7 +87,12 @@
 
 			//re-orient the canvas to the center of the clock
 			ctx.translate(center,center);
+
+			//rotate 90 degrees CCW for easier printing
 			ctx.rotate(-Math.PI / 2);
+
+			//display the hour numbers 
+			for(var i=1; i<=12; i++) displayNumber(i);
 
 			//display the hands
 			displayHand(hh,4);
@@ -106,14 +111,18 @@
 				ctx.moveTo(0,0);
 				var t = hand.getTriangle();
 				var theta = t.getTheta();
-				var H =  t.getH() * radius + center;
 				var x = t.getX() * radius;
 				var y = t.getY() * radius;
 				ctx.lineTo(x, y);
 				ctx.stroke();
 			}
 			function displayNumber(n){
-				var nh = new Hand(radius,n,12);
+				var nh = new HourHand(n,0.85);
+				var t = nh.getTriangle();
+				var x = t.getX() * radius;
+				var y = t.getY() * radius;
+				ctx.font="10px Georgia";
+				ctx.fillText(n,x,y);
 			}
 		}
 
