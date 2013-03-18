@@ -22,6 +22,16 @@
 			var el3 = document.getElementById("clock_canvas3");
 			displayClock(clock3,el3,200);
 			//printDetails(clock3);
+
+			function displayClock4(){
+				var clock4 = new Clock(new Date(), 0.3, 0.5, 0.7);
+				var el4 = document.getElementById("clock_canvas4");
+				displayClock(clock4,el4,200);
+			}
+			displayClock4();
+			setInterval(function(){
+				displayClock4();
+			}, 1000);
 		};
 
 		function displayClock(clock,can,sideLength){
@@ -104,5 +114,6 @@
 	<canvas id="clock_canvas1"></canvas>
 	<canvas id="clock_canvas2"></canvas>
 	<canvas id="clock_canvas3"></canvas>
+	<canvas id="clock_canvas4"></canvas>
 </body>
 </html>
