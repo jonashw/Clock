@@ -3,62 +3,60 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Clock</title>
+	<script src="Time.js"></script>
 	<script src="Triangle.js"></script>
 	<script src="Hand.js"></script>
 	<script src="Clock.js"></script>
 	<script src="ClockDisplay.js"></script>
-	<script src="Time.js"></script>
 	<script>
 		window.onload = function(){
-			var clock1 = new Clock(new Date(null,null,null,2,12,5), 0.3, 0.5, 0.7);
-			var el1 = document.getElementById("clock_canvas1");
-			cd1 = new ClockDisplay(clock1, el1, 200);
-			cd1.display();
+			new ClockDisplay(
+				new Clock(new Date(null,null,null,2,12,5), 0.3, 0.5, 0.7),
+				document.getElementById("clock_canvas1"),
+				200
+			).display();
 
-			var clock2 = new Clock(new Date(null,null,null,10,25,55), 0.3, 0.5, 0.7);
-			var el2 = document.getElementById("clock_canvas2");
-			cd2 = new ClockDisplay(clock2, el2, 200);
-			cd2.display();
+			new ClockDisplay(
+				new Clock(new Date(null,null,null,10,25,55), 0.3, 0.5, 0.7),
+				document.getElementById("clock_canvas2"),
+				200
+			).display();
 
-			var clock3 = new Clock(new Date(null,null,null,6,48,12), 0.3, 0.5, 0.7);
-			var el3 = document.getElementById("clock_canvas3");
-			cd3 = new ClockDisplay(clock3, el3, 200);
-			cd3.display();
+			new ClockDisplay(
+				new Clock(new Date(null,null,null,6,48,12), 0.3, 0.5, 0.7),
+				document.getElementById("clock_canvas3"),
+				200
+			).display();
 
-			function displayClock4(){
-				var clock4 = new Clock(new Date(), 0.3, 0.5, 0.7);
-				var el4 = document.getElementById("clock_canvas4");
-				cd4 = new ClockDisplay(clock4, el4, 200);
-				cd4.display();
+			liveClock(function(time){
+			 	new ClockDisplay(
+					new Clock(time.next(), 0.3, 0.5, 0.7),
+					document.getElementById("clock_canvas4"),
+					200
+				).display();
+			},1000);
+
+			liveClock(function(time){
+			 	new ClockDisplay(
+					new Clock(time.next(), 0.3, 0.5, 0.7),
+					document.getElementById("clock_canvas5"),
+					200
+				).display();
+			},50);
+
+			liveClock(function(time){
+			 	new ClockDisplay(
+					new Clock(time.next(), 0.3, 0.5, 0.7),
+					document.getElementById("clock_canvas6"),
+					200
+				).display();
+			},10);
+
+			function liveClock(fn,interval){
+				var time = new Time();
+				fn(time);//inject an arbitrary time object into the clock display fn
+				setInterval(function(){fn(time);}, interval);
 			}
-			displayClock4();
-			setInterval(function(){
-				displayClock4();
-			}, 1000);
-
-			var time5 = new Time();
-			function displayClock5(){
-				var clock5 = new Clock(time5.next(), 0.3, 0.5, 0.7);
-				var el5 = document.getElementById("clock_canvas5");
-				cd5 = new ClockDisplay(clock5, el5, 200);
-				cd5.display();
-			}
-			displayClock5();
-			setInterval(function(){
-				displayClock5();
-			}, 50);
-
-			var time6 = new Time();
-			function displayClock6(){
-				var clock = new Clock(time6.next(), 0.3, 0.5, 0.7);
-				var el = document.getElementById("clock_canvas6");
-				cd = new ClockDisplay(clock, el, 200);
-				cd.display();
-			}
-			displayClock6();
-			setInterval(function(){
-				displayClock6();
-			}, 10);
 		};
 	</script>
 </head>
