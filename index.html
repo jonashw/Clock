@@ -6,28 +6,30 @@
 	<script src="Triangle.js"></script>
 	<script src="Hand.js"></script>
 	<script src="Clock.js"></script>
+	<script src="ClockDisplay.js"></script>
 	<script src="Time.js"></script>
 	<script>
 		window.onload = function(){
 			var clock1 = new Clock(new Date(null,null,null,2,12,5), 0.3, 0.5, 0.7);
 			var el1 = document.getElementById("clock_canvas1");
-			displayClock(clock1,el1,200);
-			//printDetails(clock1);
+			cd1 = new ClockDisplay(clock1, el1, 200);
+			cd1.display();
 
 			var clock2 = new Clock(new Date(null,null,null,10,25,55), 0.3, 0.5, 0.7);
 			var el2 = document.getElementById("clock_canvas2");
-			displayClock(clock2,el2,200);
-			//printDetails(clock2);
+			cd2 = new ClockDisplay(clock2, el2, 200);
+			cd2.display();
 
 			var clock3 = new Clock(new Date(null,null,null,6,48,12), 0.3, 0.5, 0.7);
 			var el3 = document.getElementById("clock_canvas3");
-			displayClock(clock3,el3,200);
-			//printDetails(clock3);
+			cd3 = new ClockDisplay(clock3, el3, 200);
+			cd3.display();
 
 			function displayClock4(){
 				var clock4 = new Clock(new Date(), 0.3, 0.5, 0.7);
 				var el4 = document.getElementById("clock_canvas4");
-				displayClock(clock4,el4,200);
+				cd4 = new ClockDisplay(clock4, el4, 200);
+				cd4.display();
 			}
 			displayClock4();
 			setInterval(function(){
@@ -38,7 +40,8 @@
 			function displayClock5(){
 				var clock5 = new Clock(time5.next(), 0.3, 0.5, 0.7);
 				var el5 = document.getElementById("clock_canvas5");
-				displayClock(clock5,el5,200);
+				cd5 = new ClockDisplay(clock5, el5, 200);
+				cd5.display();
 			}
 			displayClock5();
 			setInterval(function(){
@@ -49,105 +52,17 @@
 			function displayClock6(){
 				var clock = new Clock(time6.next(), 0.3, 0.5, 0.7);
 				var el = document.getElementById("clock_canvas6");
-				displayClock(clock,el,200);
+				cd = new ClockDisplay(clock, el, 200);
+				cd.display();
 			}
 			displayClock6();
 			setInterval(function(){
 				displayClock6();
 			}, 10);
 		};
-
-		function displayClock(clock,can,sideLength){
-			//configure the canvas
-			var ctx = can.getContext("2d");
-			can.setAttribute("height",sideLength);
-			can.setAttribute("width",sideLength);
-			can.style.width = can.style.height = sideLength + "px";
-
-			//
-			var center = Math.floor(sideLength / 2);
-			var radius = center * 0.85;
-			var hh = clock.getHourHand();
-			var mh = clock.getMinuteHand();
-			var sh = clock.getSecondHand();
-
-			//paint outer circle
-			ctx.beginPath();
-			ctx.arc(center,center,radius,0,2 * Math.PI);
-			ctx.stroke();
-			//paint center circle
-			ctx.beginPath();
-			ctx.arc(center,center,radius/19,0,2 * Math.PI);
-			ctx.fill();
-
-			//re-orient the canvas to the center of the clock
-			ctx.translate(center,center);
-
-			//display the hour numbers 
-			for(var i=1; i<=12; i++){
-				//the canvas is roated 90 degrees, so we've gotta use the position of one number to display another
-				var label = i + 3;
-				displayHourNumber(i, label > 12 ? label - 12 : label);
-			}
-
-			//rotate 90 degrees CCW for easier printing
-			ctx.rotate(-Math.PI / 2);
-
-			//display the hands
-			displayHand(hh,4);
-			displayHand(mh,2);
-			displayHand(sh,1);
-			ctx.rotate(Math.PI / 2);
-			ctx.translate(-center,-center);
-
-			//display the time as a string
-			ctx.font="10px Georgia";
-			ctx.fillText(clock.toString(),0,10);
-
-			function displayHand(hand,lineWidth){//assumed 0,0 is the center of the clock
-				ctx.lineWidth = lineWidth;
-				ctx.beginPath();
-				ctx.moveTo(0,0);
-				var t = hand.getTriangle();
-				var theta = t.getTheta();
-				var x = t.getX() * radius;
-				var y = t.getY() * radius;
-				ctx.lineTo(x, y);
-				ctx.stroke();
-			}
-			function displayHourNumber(hour,label){
-				var nh = new HourHand(hour,0.85);
-				var t = nh.getTriangle();
-				var x = t.getX() * radius;
-				var y = t.getY() * radius;
-				ctx.font="10px Georgia";
-				ctx.fillText(label,x,y);
-			}
-		}
-
-		function printDetails(clock){
-			var hh = clock.getHourHand();
-			var mh = clock.getMinuteHand();
-			var sh = clock.getSecondHand();
-			function printRow(name,hand){
-				document.write("<tr>");
-				document.write("<td>" + name + "</td><td>" + hand.getCurrentValue() + "</td><td>" + hand.getDegrees() + "</td>");
-				document.write("</tr>");
-			}
-			document.write(clock.toString() + "<br>");
-			document.write('<table border="1">');
-			document.write("<tr>");
-			document.write("<th>Component</th><th>Original Value</th><th>Value as Degrees</th>");
-			document.write("</tr>");
-			printRow('hour',hh);
-			printRow('minute',mh);
-			printRow('second',sh);
-			document.write("</table>");
-		};
 	</script>
 </head>
 <body>
-	<hr>
 	<a href="tests/">Tests</a>
 	<hr>
 	<canvas id="clock_canvas1"></canvas>

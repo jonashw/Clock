@@ -14,7 +14,7 @@ function Time(){
 					if(this.hours > 12) this.hours = 0;
 				}
 			}
-			return new Date(null,null,null, this.hours, this.minutes, this.seconds);
+			return new Date(null, null, null, this.hours, this.minutes, this.seconds);
 		}
 	};
 }
