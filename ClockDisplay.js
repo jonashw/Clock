@@ -18,6 +18,7 @@ function ClockDisplay(clock,el,sideLength,clocklabel){
 		ctx.beginPath();
 		ctx.arc(center,center,radius,0,2 * Math.PI);
 		ctx.stroke();
+
 		//paint center circle
 		ctx.beginPath();
 		ctx.arc(center,center,radius/19,0,2 * Math.PI);
